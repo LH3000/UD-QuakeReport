@@ -17,6 +17,7 @@ import java.util.Date;
  */
 
 public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
+    private static final String LOCATION_SEPARATOR = " of ";
     public EarthquakeAdapter(Activity context, ArrayList<Earthquake> earthquakes) {
         super(context, 0, earthquakes);
     }
@@ -32,15 +33,31 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
         Earthquake currentEarthquake = getItem(position);
 
+        String originalLocation = currentEarthquake.getLocation();
+        String primaryLocation;
+        String locationOffset;
+
+        if (originalLocation.contains(LOCATION_SEPARATOR)) {
+            String[] parts = originalLocation.split(LOCATION_SEPARATOR);
+            locationOffset = parts[0] + LOCATION_SEPARATOR;
+            primaryLocation = parts[1];
+        } else {
+            locationOffset = getContext().getString(R.string.near_the);
+            primaryLocation = originalLocation;
+        }
+
         long timeInMs = currentEarthquake.getTimeInMs();
         Date dateObject = new Date(timeInMs);
 
         //populate the mag field
         TextView magnitude = (TextView) listItemView.findViewById(R.id.mag);
         magnitude.setText(currentEarthquake.getMagnitude());
-        //populate the location field
-        TextView location = (TextView) listItemView.findViewById(R.id.loc1);
-        location.setText(currentEarthquake.getLocation());
+        //populate the primary location field
+        TextView location1 = (TextView) listItemView.findViewById(R.id.primaryLoc);
+        location1.setText(primaryLocation);
+        //populate the location offset field
+        TextView location2 = (TextView) listItemView.findViewById(R.id.locOffset);
+        location2.setText(locationOffset);
         //populate the date field
         TextView dateText = (TextView) listItemView.findViewById(R.id.date);
         String date = formatDate(dateObject);
