@@ -13,25 +13,40 @@
 
         <TextView
             android:id="@+id/mag"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             tools:text="4.9" />
 
         <TextView
-            android:id="@+id/loc"
-            android:layout_width="0dp"
+            android:id="@+id/loc1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            tools:text="45km North of" />
+
+        <TextView
+            android:id="@+id/loc2"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             tools:text="Washington" />
 
         <TextView
-            android:id="@+id/time"
-            android:layout_width="0dp"
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:textAlignment="center"
             tools:text="12/12/23" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            tools:text="9:00 AM" />
     </LinearLayout>
 
 </LinearLayout>
