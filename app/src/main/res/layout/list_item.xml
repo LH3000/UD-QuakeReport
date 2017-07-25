@@ -13,15 +13,20 @@
 
         <TextView
             android:id="@+id/mag"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/mag_circle"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
             tools:text="4.9" />
 
         <TextView
             android:id="@+id/locOffset"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
             android:layout_weight="1"
             tools:text="45km North of" />
 
