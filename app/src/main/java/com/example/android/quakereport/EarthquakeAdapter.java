@@ -83,7 +83,6 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         // Set the color on the magnitude circle
         magnitudeCircle.setColor(magnitudeColor);
 
-
         return listItemView;
     }
 
@@ -128,7 +127,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
     }
 
     private String formatDate(Date dateObject) {
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("LLL DD, YYYY");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM dd, YYYY");
         return dateFormatter.format(dateObject);
     }
 

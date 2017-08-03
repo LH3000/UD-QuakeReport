@@ -7,6 +7,7 @@ package com.example.android.quakereport;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -142,8 +143,20 @@ public final class QueryUtils {
         // is formatted, a JSONException exception object will be thrown.
         // Catch the exception so the app doesn't crash, and print the error message to the logs.
         try {
-            // create a JSONObject from the jsonResponse string
+            // create a JSONObject from the jsonResponse string, and parse it into earthquake objects
+            // store them in
             JSONObject baseJsonResponse = new JSONObject(jsonResponse);
+            JSONArray earthquakeFeatures = baseJsonResponse.getJSONArray("features");
+            for (int i = 0; i < earthquakeFeatures.length(); i++) {
+                JSONObject currentEarthquake = earthquakeFeatures.getJSONObject(i);
+                JSONObject properties = currentEarthquake.getJSONObject("properties");
+                Earthquake thisEarthquake = new Earthquake(
+                        properties.getDouble("mag"),
+                        properties.getString("place"),
+                        properties.getLong("time"),
+                        properties.getString("url"));
+                earthquakesList.add(thisEarthquake);
+            }
 
         } catch (JSONException e) {
             // If an error is thrown when executing any of the above statements in the "try" block,
