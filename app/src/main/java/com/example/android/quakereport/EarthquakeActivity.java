@@ -16,8 +16,11 @@
 package com.example.android.quakereport;
 
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +31,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.view.View.GONE;
 
 public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Earthquake>> {
 
@@ -40,6 +45,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
      */
     private static final int EARTHQUAKE_LOADER_ID = 1;
     private TextView emptyView;
+    private View loadingIndicator;
     //adapter for the list of earthquakes
     private EarthquakeAdapter earthquakeAdapter;
 
@@ -53,13 +59,31 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         // find reference to the "no data" text view
         emptyView = (TextView) findViewById(R.id.empty_view);
         earthquakeListView.setEmptyView(emptyView);
+        loadingIndicator = findViewById(R.id.loading_indicator);
+
+        //region **check if there is internet connectivity
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        if (isConnected) {
+            // initiate earthquake loader and start loading
+            getLoaderManager().initLoader(EARTHQUAKE_LOADER_ID, null, this).forceLoad();
+        } else {
+            // hide progress icon and display "no internet"
+            loadingIndicator.setVisibility(GONE);
+            emptyView.setText(R.string.no_internet);
+        }
+        //endregion
 
         // create a new adapter that takes an empty list of earthquakes as input
         earthquakeAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
         // set the adaptor on the {@link ListView} so the list can be populated in UI
         earthquakeListView.setAdapter(earthquakeAdapter);
-        // initiate earthquake loader and start loading
-        getLoaderManager().initLoader(EARTHQUAKE_LOADER_ID, null, this).forceLoad();
+
         // set an item click listener on the list view, which sends URL intent to a browser
         earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -88,8 +112,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     @Override
     public void onLoadFinished(Loader<List<Earthquake>> loader, List<Earthquake> data) {
         // Hide loading indicator because the data has been loaded
-        View loadingIndicator = findViewById(R.id.loading_indicator);
-        loadingIndicator.setVisibility(View.GONE);
+        loadingIndicator.setVisibility(GONE);
         // clear adaptor of previous earthquake data
         earthquakeAdapter.clear();
         // If there is a valid list of {@link Earthquake}s, then add them to the adapter's
